@@ -19,7 +19,17 @@ RSpec.configure do |config|
         title: 'API V1',
         version: 'v1'
       },
-      paths: {}
+      paths: {},
+      securityDefinitions: {
+        APIKeyHeader: {
+          type: :apiKey,
+          name: 'X-API-Key',
+          in: :header
+        }
+      },
+      security: [
+        { APIKeyHeader: [] }
+      ]
     }
   }
 end
