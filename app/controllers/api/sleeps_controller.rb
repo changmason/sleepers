@@ -9,6 +9,11 @@ module Api
       render status: :ok
     end
 
+    def index
+      @sleeps = current_user.sleeps.order(:created_at)
+      render status: :ok
+    end
+
     private
 
     def current_user

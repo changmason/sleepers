@@ -6,6 +6,7 @@ describe 'Sleeps API' do
     3.times.map { create(:sleep, user: user) }
   end
 
+  # PUT /api/sleeps/{uuid}
   path '/api/sleeps/{uuid}' do
     put 'Create or update a sleep record' do
       tags 'Sleeps'
@@ -55,6 +56,7 @@ describe 'Sleeps API' do
           expect(record['waked_at']).to eq(waked_at)
           expect(record['duration']).to eq(waked_at.to_time - slept_at.to_time)
           expect(record['created_at'].to_time).to be_within(3).of(Time.now)
+          expect(record['updated_at'].to_time).to be_within(3).of(Time.now)
         end
       end
 
@@ -94,4 +96,46 @@ describe 'Sleeps API' do
     end
   end
 
+  # GET /api/sleeps
+  path '/api/sleeps' do
+    get 'Retrieves sleep records' do
+      tags 'Sleeps'
+      produces 'application/json'
+      parameter name: :'X-API-Key', in: :heade, type: :string, format: :uuid, required: true
+
+      response '200', 'Sleep records found' do
+        schema type: :object,
+          properties: {
+            status: { type: :string, enum: ['ok'] },
+            type: { type: :string, enum: ['Sleep'] },
+            records: {
+              type: :array,
+              items: {
+                uuid: { type: :string, format: 'uuid' },
+                slept_at: { type: :string, format: 'date-time' },
+                waked_at: { type: :string, format: 'date-time' },
+                duration: { type: :integer },
+                created_at: { type: :string, format: 'date-time' },
+                updated_at: { type: :string, format: 'date-time' }
+              }
+            }
+          }
+
+        let(:'X-API-Key') { user.api_key }
+        run_test! do |res|
+          json = JSON.parse(res.body)
+          expect(json['records']).to be_a(Array)
+          expect(json['records'][0]['uuid']).to eq(sleeps[0].uuid)
+          expect(json['records'][1]['uuid']).to eq(sleeps[1].uuid)
+          expect(json['records'][2]['uuid']).to eq(sleeps[2].uuid)
+          expect(json['records'][0].keys).to contain_exactly('uuid', 'slept_at', 'waked_at', 'duration', 'created_at', 'updated_at')
+        end
+      end
+
+      response '401', 'unauthorized request' do
+        let(:'X-API-Key') { 'invalid-api-key' }
+        run_test!
+      end
+    end
+  end
 end

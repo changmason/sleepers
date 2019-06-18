@@ -4,5 +4,6 @@ Rails.application.routes.draw do
 
   scope '/api', module: 'api' do
     put '/sleeps/:uuid', to: 'sleeps#upsert'
+    get '/sleeps', to: 'sleeps#index'
   end
 end
