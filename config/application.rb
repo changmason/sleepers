@@ -29,5 +29,8 @@ module Sleepers
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Auto-load files in the lib folder.
+    config.autoload_paths << Rails.root.join('lib')
   end
 end
