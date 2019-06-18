@@ -1,3 +1,9 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
+
+  scope '/api', module: 'api' do
+    put '/sleeps/:uuid', to: 'sleeps#upsert'
+    get '/sleeps', to: 'sleeps#index'
+  end
 end
