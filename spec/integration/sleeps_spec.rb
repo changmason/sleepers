@@ -60,6 +60,21 @@ describe 'Sleeps API' do
         end
       end
 
+      response '401', 'Unauthorized request' do
+        schema type: :object,
+          properties: {
+            status: { type: :string, enum: ['error'] },
+            message: { type: :string, enum: ['Unauthorized request, please provide a valid api-key'] }
+          }
+
+        let(:uuid) { SecureRandom.uuid }
+        let(:slept_at) { '2019-06-10T23:30:00+00:00' }
+        let(:waked_at) { '2019-06-11T07:20:00+00:00' }
+        let(:sleep) { { slept_at: slept_at, waked_at: waked_at } }
+        let(:'X-API-Key') { 'invalid-api-key' }
+        run_test!
+      end
+
       response '400', 'Bad request' do
         schema type: :object,
           properties: {
@@ -132,7 +147,13 @@ describe 'Sleeps API' do
         end
       end
 
-      response '401', 'unauthorized request' do
+      response '401', 'Unauthorized request' do
+        schema type: :object,
+          properties: {
+            status: { type: :string, enum: ['error'] },
+            message: { type: :string, enum: ['Unauthorized request, please provide a valid api-key'] }
+          }
+
         let(:'X-API-Key') { 'invalid-api-key' }
         run_test!
       end

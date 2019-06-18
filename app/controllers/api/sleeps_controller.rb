@@ -22,7 +22,7 @@ module Api
 
     def find_user_by_request_api_key
       unless user = User.find_by(api_key: request_api_key)
-        raise Api::Errors::UnauthorizeError
+        raise Api::Errors::UnauthorizedRequest
       end
       user
     end

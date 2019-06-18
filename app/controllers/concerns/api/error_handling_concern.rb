@@ -3,7 +3,7 @@ module Api
     extend ActiveSupport::Concern
 
     included do
-      rescue_from Api::Errors::UnauthorizeError do |err|
+      rescue_from Api::Errors::UnauthorizedRequest do |err|
         render json: { status: err.status, message: err.message }, status: :unauthorized
       end
 

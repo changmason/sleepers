@@ -1,6 +1,6 @@
 module Api
   module Errors
-    class UnauthorizeError < StandardError
+    class UnauthorizedRequest < StandardError
       def status
         'error'
       end
