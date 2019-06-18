@@ -1,16 +1,6 @@
 module Api
   class SleepsController < ApplicationController
-    rescue_from Api::Errors::UnauthorizeError do |err|
-      render json: { status: err.status, message: err.message }, status: :unauthorized
-    end
-
-    rescue_from ActionController::ParameterMissing do |err|
-      render json: { status: 'error', message: err.message }, status: :bad_request
-    end
-
-    rescue_from ActiveRecord::RecordInvalid do |err|
-      render json: { status: 'error', messages: err.record.errors.full_messages }, status: :bad_request
-    end
+    include Api::ErrorHandlingConcern
 
     def upsert
       @sleep = current_user.sleeps.find_or_initialize_by(uuid: params[:uuid])
