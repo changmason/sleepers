@@ -7,5 +7,6 @@ Rails.application.routes.draw do
     get '/sleeps', to: 'sleeps#index'
 
     post 'followings', to: 'followings#create'
+    delete 'followings/:id', to: 'followings#destroy'
   end
 end

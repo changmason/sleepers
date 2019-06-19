@@ -54,6 +54,7 @@ describe 'Following friends API' do
 
         let(:following) { { id: following_user.id } }
         let(:'X-API-Key') { 'invalid-api-key' }
+
         run_test!
       end
 
@@ -76,4 +77,48 @@ describe 'Following friends API' do
     end
   end
 
+  # DELETE /api/followings/{id}
+  path '/api/followings/{id}' do
+    delete 'Unfollow a friend' do
+      tags 'friends'
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: :'X-API-Key', in: :heade, type: :string, format: :uuid, required: true
+      parameter name: :id, in: :path, type: :integer, required: true
+
+      response '200', 'Following friend record deleted' do
+        schema type: :object,
+          properties: {
+            status: { type: :string, enum: ['success'] },
+            message: { type: :string, enum: ['Following friend record deleted'] }
+          }
+
+        let(:id) { following_user.id }
+        let(:'X-API-Key') { current_user.api_key }
+
+        before do
+          current_user.followings << following_user
+        end
+
+        run_test! do |res|
+          json = JSON.parse(res.body)
+          expect(json['status']).to eq('success')
+          expect(json['message']).to eq('Following friend record deleted')
+        end
+      end
+
+      response '401', 'Unauthorized request' do
+        schema type: :object,
+          properties: {
+            status: { type: :string, enum: ['error'] },
+            message: { type: :string, enum: ['Unauthorized request, please provide a valid api-key'] }
+          }
+
+        let(:id) { following_user.id }
+        let(:'X-API-Key') { 'invalid-api-key' }
+
+        run_test!
+      end
+    end
+  end
 end

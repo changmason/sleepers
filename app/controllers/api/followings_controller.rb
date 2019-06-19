@@ -7,5 +7,10 @@ module Api
     rescue ActiveRecord::RecordNotUnique
       render status: :ok
     end
+
+    def destroy
+      current_user.followingships.where(following_id: params[:id]).destroy_all
+      render json: { status: 'success', message: 'Following friend record deleted'}, status: :ok
+    end
   end
 end
