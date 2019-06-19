@@ -14,6 +14,10 @@ module Api
       rescue_from ActiveRecord::RecordInvalid do |err|
         render json: { status: 'error', messages: err.record.errors.full_messages }, status: :bad_request
       end
+
+      rescue_from ActiveRecord::RecordNotFound do |err|
+        render json: { status: 'error', message: err.message }, status: :bad_request
+      end
     end
   end
 end
