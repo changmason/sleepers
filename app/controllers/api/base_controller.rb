@@ -18,9 +18,5 @@ module Api
     def request_api_key
       request.headers['HTTP_X_API_KEY']
     end
-
-    def sleep_params
-      params.require(:sleep).permit(:slept_at, :waked_at)
-    end
   end
 end
