@@ -8,5 +8,7 @@ Rails.application.routes.draw do
 
     post 'followings', to: 'followings#create'
     delete 'followings/:id', to: 'followings#destroy'
+
+    get '/friends/:id/sleeps', to: 'friend_sleeps#index'
   end
 end
