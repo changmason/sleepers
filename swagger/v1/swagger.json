@@ -1,0 +1,546 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/followings": {
+      "post": {
+        "summary": "Follow a friend",
+        "tags": [
+          "Friends"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-API-Key",
+            "in": "heade",
+            "type": "string",
+            "format": "uuid",
+            "required": true
+          },
+          {
+            "name": "following",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "required": true
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Following friend record created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "User"
+                  ]
+                },
+                "record": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "error"
+                  ]
+                },
+                "message": {
+                  "type": "string",
+                  "enum": [
+                    "Unauthorized request, please provide a valid api-key"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Following user not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "error"
+                  ]
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/followings/{id}": {
+      "delete": {
+        "summary": "Unfollow a friend",
+        "tags": [
+          "Friends"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-API-Key",
+            "in": "heade",
+            "type": "string",
+            "format": "uuid",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Following friend record deleted",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ]
+                },
+                "message": {
+                  "type": "string",
+                  "enum": [
+                    "Following friend record deleted"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "error"
+                  ]
+                },
+                "message": {
+                  "type": "string",
+                  "enum": [
+                    "Unauthorized request, please provide a valid api-key"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/friends/{id}/sleeps": {
+      "get": {
+        "summary": "Retrieves a friend's sleep records of past week",
+        "tags": [
+          "Friend sleeps"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "X-API-Key",
+            "in": "header",
+            "type": "string",
+            "format": "uuid",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Friend's sleep records found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "ok"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Sleep"
+                  ]
+                },
+                "records": {
+                  "type": "array",
+                  "items": {
+                    "uuid": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "slept_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "waked_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "duration": {
+                      "type": "integer"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "error"
+                  ]
+                },
+                "message": {
+                  "type": "string",
+                  "enum": [
+                    "Unauthorized request, please provide a valid api-key"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Following user record not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "error"
+                  ]
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sleeps/{uuid}": {
+      "put": {
+        "summary": "Create or update a sleep record",
+        "tags": [
+          "Sleeps"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-API-Key",
+            "in": "heade",
+            "type": "string",
+            "format": "uuid",
+            "required": true
+          },
+          {
+            "name": "uuid",
+            "in": "path",
+            "type": "string",
+            "format": "uuid",
+            "required": true
+          },
+          {
+            "name": "sleep",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "slept_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "required": true
+                },
+                "waked_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "required": true
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sleep record created or updated",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "ok"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Sleep"
+                  ]
+                },
+                "record": {
+                  "type": "object",
+                  "properties": {
+                    "uuid": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "slept_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "waked_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "duration": {
+                      "type": "integer"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "error"
+                  ]
+                },
+                "message": {
+                  "type": "string",
+                  "enum": [
+                    "Unauthorized request, please provide a valid api-key"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "error"
+                  ]
+                },
+                "message": {
+                  "type": "string",
+                  "enum": [
+                    "param is missing or the value is empty: sleep"
+                  ]
+                },
+                "messages": {
+                  "type": "array"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sleeps": {
+      "get": {
+        "summary": "Retrieves sleep records",
+        "tags": [
+          "Sleeps"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-API-Key",
+            "in": "heade",
+            "type": "string",
+            "format": "uuid",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sleep records found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "ok"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Sleep"
+                  ]
+                },
+                "records": {
+                  "type": "array",
+                  "items": {
+                    "uuid": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "slept_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "waked_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "duration": {
+                      "type": "integer"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "error"
+                  ]
+                },
+                "message": {
+                  "type": "string",
+                  "enum": [
+                    "Unauthorized request, please provide a valid api-key"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "APIKeyHeader": {
+      "type": "apiKey",
+      "name": "X-API-Key",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "APIKeyHeader": [
+
+      ]
+    }
+  ]
+}
