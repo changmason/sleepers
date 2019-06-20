@@ -7,7 +7,7 @@ describe 'Following friends API' do
   # POST /api/followings
   path '/api/followings' do
     post 'Follow a friend' do
-      tags 'friends'
+      tags 'Friends'
       consumes 'application/json'
       produces 'application/json'
       parameter name: :'X-API-Key', in: :heade, type: :string, format: :uuid, required: true
@@ -58,7 +58,7 @@ describe 'Following friends API' do
         run_test!
       end
 
-      response '400', 'Following user record not found' do
+      response '400', 'Following user not found' do
         schema type: :object,
           properties: {
             status: { type: :string, enum: ['error'] },
@@ -80,7 +80,7 @@ describe 'Following friends API' do
   # DELETE /api/followings/{id}
   path '/api/followings/{id}' do
     delete 'Unfollow a friend' do
-      tags 'friends'
+      tags 'Friends'
       consumes 'application/json'
       produces 'application/json'
       parameter name: :'X-API-Key', in: :heade, type: :string, format: :uuid, required: true

@@ -2,9 +2,7 @@ require 'swagger_helper'
 
 describe 'Sleeps API' do
   let!(:user) { create(:user) }
-  let!(:sleeps) do
-    3.times.map { create(:sleep, user: user) }
-  end
+  let!(:sleeps) { 3.times.map { create(:sleep, user: user) } }
 
   # PUT /api/sleeps/{uuid}
   path '/api/sleeps/{uuid}' do
@@ -72,6 +70,7 @@ describe 'Sleeps API' do
         let(:waked_at) { '2019-06-11T07:20:00+00:00' }
         let(:sleep) { { slept_at: slept_at, waked_at: waked_at } }
         let(:'X-API-Key') { 'invalid-api-key' }
+
         run_test!
       end
 
@@ -137,6 +136,7 @@ describe 'Sleeps API' do
           }
 
         let(:'X-API-Key') { user.api_key }
+
         run_test! do |res|
           json = JSON.parse(res.body)
           expect(json['records']).to be_a(Array)
@@ -155,6 +155,7 @@ describe 'Sleeps API' do
           }
 
         let(:'X-API-Key') { 'invalid-api-key' }
+
         run_test!
       end
     end
