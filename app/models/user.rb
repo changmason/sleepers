@@ -14,7 +14,7 @@ class User < ApplicationRecord
   before_create :generate_api_key
 
   def past_week_sleeps
-    self.sleeps.where(['slept_at > ?', 7.days.ago])
+    self.sleeps.where(['slept_at >= ?', 7.days.ago])
   end
 
   private

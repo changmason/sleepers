@@ -30,4 +30,23 @@ RSpec.describe User, type: :model do
     end
   end
 
+  context 'before creating the record' do
+    let(:user) { build(:user) }
+
+    it 'generates api_key for the user' do
+      expect(user.api_key).to be_blank
+      user.save
+      expect(user.api_key).to_not be_blank
+    end
+  end
+
+  describe '#past_week_sleeps' do
+    let!(:last_month_sleep) { create(:sleep, user: user, slept_at: 1.month.ago, waked_at: 1.month.ago + 8.hour) }
+    let!(:past_week_sleep) { create(:sleep, user: user, slept_at: 1.week.ago + 1.minute, waked_at: 1.week.ago + 8.hour) }
+
+    it 'returns sleep records only in past week' do
+      expect(user.past_week_sleeps.to_a).to_not include(last_month_sleep)
+      expect(user.past_week_sleeps.to_a).to include(past_week_sleep)
+    end
+  end
 end
